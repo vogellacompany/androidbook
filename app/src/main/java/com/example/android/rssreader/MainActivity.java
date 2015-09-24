@@ -15,7 +15,7 @@ import com.example.android.rssfeedlibrary.RssItem;
 
 public class MainActivity extends Activity implements MyListFragment.OnItemSelectedListener, ActionMode.Callback {
 
-    private  RssItem selectedRssItem;
+    private RssItem selectedRssItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +45,13 @@ public class MainActivity extends Activity implements MyListFragment.OnItemSelec
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh:
-                MyListFragment fragment = (MyListFragment) getFragmentManager()
-                        .findFragmentById(R.id.listFragment);
-                fragment.updateListContent();
+                Intent i = new Intent(this, RssDownloadService.class);
+                i.putExtra(RssApplication.URL, "http://www.vogella.com/article.rss");
+                startService(i);
                 break;
             case R.id.action_settings:
+                Intent intent = new Intent(this, MyPreferences.class);
+                startActivity(intent);
                 Toast.makeText(this, "Action Settings selected", Toast.LENGTH_SHORT)
                         .show();
                 break;
@@ -59,7 +61,7 @@ public class MainActivity extends Activity implements MyListFragment.OnItemSelec
         }
 
         return true;
-        }
+    }
 
 
     @Override
@@ -82,7 +84,7 @@ public class MainActivity extends Activity implements MyListFragment.OnItemSelec
         startActionMode(this);
     }
 
-    public void goToActionMode(){
+    public void goToActionMode() {
         startActionMode(this);
     }
 
