@@ -64,9 +64,9 @@ public class MainActivity extends Activity implements MyListFragment.OnItemSelec
 
     @Override
     public void onRssItemSelected(String link) {
-        DetailFragment fragment = (DetailFragment) getFragmentManager()
-                .findFragmentById(R.id.detailFragment);
-        if (fragment != null && fragment.isInLayout()) {
+        if (getResources().getBoolean(R.bool.twoPaneMode)) {
+            DetailFragment fragment = (DetailFragment) getFragmentManager()
+                    .findFragmentById(R.id.detailFragment);
             fragment.setText(link);
         } else {
             Intent intent = new Intent(getApplicationContext(),

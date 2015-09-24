@@ -16,7 +16,7 @@ public class DetailActivity extends Activity {
         super.onCreate(savedInstanceState);
 // check if activity has been switched to landscape mode
 // if yes, finish this activity
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (getResources().getBoolean(R.bool.twoPaneMode)) {
             finish();
             return;
         }

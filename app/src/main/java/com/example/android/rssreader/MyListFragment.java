@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -47,7 +48,7 @@ public class MyListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rsslist_overview, container, false);
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(),2);
         mRecyclerView.setLayoutManager(mLayoutManager);
         rssItems = new ArrayList<>();
         adapter = new MyRecyclerAdapter(rssItems, this);
