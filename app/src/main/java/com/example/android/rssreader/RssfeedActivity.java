@@ -13,7 +13,7 @@ import android.widget.Toolbar;
 
 import com.example.android.rssfeedlibrary.RssItem;
 
-public class MainActivity extends Activity implements MyListFragment.OnItemSelectedListener, ActionMode.Callback {
+public class RssfeedActivity extends Activity implements MyListFragment.OnItemSelectedListener, ActionMode.Callback {
 
     private RssItem selectedRssItem;
 
@@ -79,19 +79,14 @@ public class MainActivity extends Activity implements MyListFragment.OnItemSelec
     }
 
     @Override
-    public void showContextMenu(RssItem item) {
+    public void goToActionMode(RssItem item) {
         this.selectedRssItem = item;
-        startActionMode(this);
-    }
-
-    public void goToActionMode() {
         startActionMode(this);
     }
 
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         MenuInflater inflater = mode.getMenuInflater();
-        // assumes that you have "contexual.xml" menu resources
         inflater.inflate(R.menu.actionmode, menu);
         return true;
     }

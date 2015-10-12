@@ -1,16 +1,11 @@
 package com.example.android.rssreader;
 
-import android.media.Image;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.android.rssfeedlibrary.RssItem;
@@ -18,8 +13,8 @@ import com.example.android.rssfeedlibrary.RssItem;
 import java.util.List;
 import java.util.Random;
 
-public class MyRecyclerAdapter
-        extends RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder> {
+public class RssItemAdapter
+        extends RecyclerView.Adapter<RssItemAdapter.ViewHolder> {
 
     private List<RssItem> rssItems;
     private MyListFragment myListFragment;
@@ -50,16 +45,6 @@ public class MyRecyclerAdapter
     }
 
     @Override
-    public int getItemViewType(int position) {
-        if (position % 2 == 1) {
-            return 0;
-        }
-        return 1;
-    }
-
-
-
-    @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final RssItem rssItem = rssItems.get(position);
         holder.txtHeader.setText(rssItem.getTitle());
@@ -70,6 +55,15 @@ public class MyRecyclerAdapter
             public void onClick(View v) {
                 myListFragment.updateDetail(rssItem.getLink());
             }
+        });
+        holder.mainLayout.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                myListFragment.goToActionMode(rssItem);
+                return true;
+            }
+
         });
         Random r = new Random();
         int i = r.nextInt(10);
@@ -85,7 +79,7 @@ public class MyRecyclerAdapter
     }
 
 
-    public MyRecyclerAdapter(List<RssItem> rssItems, MyListFragment myListFragment) {
+    public RssItemAdapter(List<RssItem> rssItems, MyListFragment myListFragment) {
         this.rssItems = rssItems;
         this.myListFragment = myListFragment;
     }
