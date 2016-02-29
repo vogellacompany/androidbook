@@ -2,6 +2,8 @@ package com.example.android.rssreader;
 
 import android.app.IntentService;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -24,13 +26,14 @@ public class RssDownloadService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Bundle extras = intent.getExtras();
-        String url = extras.getString(RssApplication.URL);
-        List<RssItem> parse = RssFeedProvider.parse(url);
-        RssApplication app = (RssApplication) getApplication();
-        app.list.clear();
-        app.list.addAll(parse);
-        Intent i = new Intent(RssApplication.RSS_UPDATE);
+        String s = intent.getExtras().getString(RssApplication.URL);
+        List<RssItem> list = RssFeedProvider.parse(s);
+        RssApplication.list.clear();
+        RssApplication.list.addAll(list);
+        Intent i = new Intent("neuedaten");
         sendBroadcast(i);
+
+
     }
+
 }

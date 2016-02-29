@@ -23,7 +23,7 @@
         <activity android:name=".MyPreferences" >
         </activity>
 
-        <service android:name="RssDownloadService" >
+        <service android:name="RssDownloadService" android:process=":lars">
         </service>
     </application>
 

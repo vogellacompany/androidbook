@@ -27,6 +27,7 @@ public class MyListFragment extends Fragment {
             updateListContent();
         }
     };
+
     IntentFilter f = new IntentFilter(RssApplication.RSS_UPDATE);
 
 

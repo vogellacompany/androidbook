@@ -16,18 +16,19 @@ import com.example.android.rssfeedlibrary.RssItem;
 public class RssfeedActivity extends Activity implements MyListFragment.OnItemSelectedListener, ActionMode.Callback {
 
     private RssItem selectedRssItem;
+    private Toolbar tb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        tb = (Toolbar) findViewById(R.id.toolbar);
         setActionBar(tb);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        tb = (Toolbar) findViewById(R.id.toolbar);
         tb.inflateMenu(R.menu.mainmenu);
         tb.setOnMenuItemClickListener(
                 new Toolbar.OnMenuItemClickListener() {
