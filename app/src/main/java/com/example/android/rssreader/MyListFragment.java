@@ -20,7 +20,6 @@ import java.util.List;
 public class MyListFragment extends Fragment {
     private OnItemSelectedListener listener;
     RssItemAdapter adapter;
-    List<RssItem> rssItems;
     BroadcastReceiver updateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -37,8 +36,7 @@ public class MyListFragment extends Fragment {
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        rssItems = new ArrayList<>();
-        adapter = new RssItemAdapter(rssItems, this);
+        adapter = new RssItemAdapter(RssApplication.list, this);
         mRecyclerView.setAdapter(adapter);
         return view;
     }
@@ -60,8 +58,6 @@ public class MyListFragment extends Fragment {
     }
 
     public void setListContent(List<RssItem> result) {
-        rssItems.clear();
-        rssItems.addAll(result);
         adapter.notifyDataSetChanged();
     }
 

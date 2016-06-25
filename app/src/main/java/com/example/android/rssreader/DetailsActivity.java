@@ -15,8 +15,8 @@ public class DetailsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activithy_details);
-        dualPaneMode = getResources().getBoolean(R.bool.dualPaneMode);
+        setContentView(R.layout.activity_detail);
+        dualPaneMode = getResources().getBoolean(R.bool.twoPaneMode);
         if (dualPaneMode){
             finish();
         }
