@@ -31,10 +31,10 @@ public class RssDownloadService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        SharedPreferences settings =
-                PreferenceManager.getDefaultSharedPreferences(this);
-        String url = settings.getString("url",RssApplication.URL);
-
+//        SharedPreferences settings =
+//                PreferenceManager.getDefaultSharedPreferences(this);
+//        String url = settings.getString("url",RssApplication.URL);
+        String url = intent.getExtras().getString(RssApplication.URL);
         List<RssItem> list = RssFeedProvider.parse(url);
         RssApplication.list.clear();
         RssApplication.list.addAll(list);

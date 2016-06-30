@@ -6,7 +6,8 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="horizontal"
@@ -17,14 +18,7 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         >
 
-        <fragment
-            android:id="@+id/listFragment"
-            class="com.example.android.rssreader.MyListFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/fragment_rsslist_overview"></fragment>
-
-    </LinearLayout>
+    </FrameLayout>
 
     <Toolbar
         android:id="@+id/toolbar"

@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    cardview:cardElevation="4dp"
-    cardview:cardCornerRadius="4dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:background="?android:attr/selectableItemBackground"
-        android:padding="6dip">
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    >
 
         <ImageView
             android:id="@+id/icon"
@@ -20,7 +12,6 @@
             android:layout_height="64dp"
             android:layout_marginRight="6dip"
             android:scaleType="fitCenter"
-            android:src="@drawable/rssfeeds"
             />
 
         <LinearLayout
@@ -49,5 +40,4 @@
                 android:text="RSS URL " />
         </LinearLayout>
 
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+</LinearLayout>

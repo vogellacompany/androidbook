@@ -9,12 +9,15 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toolbar;
 
 import com.example.android.rssfeedlibrary.RssItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MyListFragment extends Fragment {
@@ -29,6 +32,11 @@ public class MyListFragment extends Fragment {
 
     IntentFilter f = new IntentFilter(RssApplication.RSS_UPDATE);
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +48,8 @@ public class MyListFragment extends Fragment {
         mRecyclerView.setAdapter(adapter);
         return view;
     }
+
+
 
     @Override
     public void onResume() {
@@ -81,6 +91,31 @@ public class MyListFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement MyListFragment.OnItemSelectedListener");
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Toolbar tb = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        tb.inflateMenu(R.menu.listfragment_menu);
+        MenuItem action_refresh = tb.getMenu().findItem(R.id.action_refresh);
+        action_refresh.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                return onOptionsItemSelected(menuItem);
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                updateListContent();
+                return true;
+            default:
+                break;
+        }
+        return false;
     }
 
     //    // triggers update of the details fragment

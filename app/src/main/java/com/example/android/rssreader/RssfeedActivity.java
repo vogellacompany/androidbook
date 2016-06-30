@@ -1,22 +1,20 @@
 package com.example.android.rssreader;
 
-import android.animation.ObjectAnimator;
-import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.os.ResultReceiver;
-import android.support.v7.app.AppCompatActivity;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -27,28 +25,40 @@ public class RssfeedActivity extends Activity implements MyListFragment.OnItemSe
     private RssItem selectedRssItem;
     private Toolbar tb;
     Handler handler;
+    View refreshButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         tb = (Toolbar) findViewById(R.id.toolbar);
         setActionBar(tb);
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                System.out.println(msg.toString());
-            }
-        };
 
-        Message message = new Message();
-        message.setData(new Bundle());
-        handler.sendMessage(message);
+        if (findViewById(R.id.fragment_container) == null) {
+            // all good, we use the fragments defined in the layout
+            return;
+        }
+        // if savedInstanceState is null we need to load at least one fragment
+        if (savedInstanceState != null) {
+            // cleanup any existing fragments in case we are in detailed mode
+            getFragmentManager().executePendingTransactions();
+            Fragment fragmentById = getFragmentManager().findFragmentById(R.id.fragment_container);
+            if (fragmentById!=null) {
+                getFragmentManager().beginTransaction()
+                        .remove(fragmentById).commit();
+            }
+        }
+        MyListFragment listFragment = new MyListFragment();
+        FrameLayout viewById = (FrameLayout) findViewById(R.id.fragment_container);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, listFragment).commit();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        tb = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         tb.inflateMenu(R.menu.mainmenu);
         tb.setOnMenuItemClickListener(
                 new Toolbar.OnMenuItemClickListener() {
@@ -57,39 +67,35 @@ public class RssfeedActivity extends Activity implements MyListFragment.OnItemSe
                         return onOptionsItemSelected(item);
                     }
                 });
-
         return true;
     }
 
+
+
+    // #<3>
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_refresh:
-                Intent i = new Intent(this, RssDownloadService.class);
-                i.putExtra(RssApplication.URL, "http://www.vogella.com/article.rss");
-                View refreshButton = tb.findViewById(R.id.action_refresh);
-                refreshButton.animate().rotation(100f).setDuration(2000);
-                RotateAnimation rotate = new RotateAnimation(180, 360, Animation.RELATIVE_TO_SELF,
-                        0.5f,  Animation.RELATIVE_TO_SELF, 0.5f);
-                rotate.setDuration(1000);
-                rotate.setRepeatCount(Animation.INFINITE);
-                refreshButton.startAnimation(rotate);
+//                refreshButton.animate().rotation(100f).setDuration(2000);
+//                RotateAnimation rotate = new RotateAnimation(180, 360, Animation.RELATIVE_TO_SELF,
+//                        0.5f,  Animation.RELATIVE_TO_SELF, 0.5f);
+//                rotate.setDuration(1000);
+//                rotate.setRepeatCount(Animation.INFINITE);
+//                refreshButton.startAnimation(rotate);
+//                refreshButton.clearAnimation();
 
-                refreshButton.setEnabled(false);
-                startService(i);
-                break;
+//                refreshButton.setEnabled(false);
             case R.id.action_settings:
                 Intent intent = new Intent(this, MyPreferences.class);
                 startActivity(intent);
                 Toast.makeText(this, "Action Settings selected", Toast.LENGTH_SHORT)
                         .show();
-                break;
-
+                return true;
             default:
                 break;
         }
 
-        return true;
+        return  super.onOptionsItemSelected(item);
     }
 
 
@@ -100,45 +106,26 @@ public class RssfeedActivity extends Activity implements MyListFragment.OnItemSe
                     .findFragmentById(R.id.detailFragment);
             fragment.setText(link);
         } else {
-            Intent intent = new Intent(getApplicationContext(),
-                    DetailActivity.class);
-            intent.putExtra(DetailActivity.EXTRA_URL, link);
-            startActivity(intent);
+            // replace the fragment
+            // Create fragment and give it an argument for the selected article
+            DetailFragment newFragment = new DetailFragment();
+            Bundle args = new Bundle();
+            args.putString(DetailFragment.EXTRA_URL, link);
+            newFragment.setArguments(args);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
+
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+
+            // Commit the transaction
+            transaction.commit();
 
         }
     }
 
-    @Override
-    public void goToActionMode(RssItem item) {
-        this.selectedRssItem = item;
-        startActionMode(this);
-    }
 
-    @Override
-    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        MenuInflater inflater = mode.getMenuInflater();
-        inflater.inflate(R.menu.actionmode, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        return false;
-    }
-
-    @Override
-    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_TEXT, "I found this interesting link" + selectedRssItem.getLink());
-        intent.setType("text/plain");
-        startActivity(intent);
-        mode.finish(); // Action picked, so close the CAB
-        selectedRssItem = null;
-        return true;
-    }
-
-    @Override
-    public void onDestroyActionMode(ActionMode mode) {
-
-    }
 }
